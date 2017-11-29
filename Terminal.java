@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
+import javax.swing.JScrollBar;
 
 public class Terminal extends JFrame {
 
@@ -29,6 +30,7 @@ public class Terminal extends JFrame {
 			public void run() {
 				try {
 					Terminal frame = new Terminal();
+
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -62,7 +64,6 @@ public class Terminal extends JFrame {
 
 				
 				
-				
 				switch(commandLineInput)
 				{
 //				If PROC is typed
@@ -83,16 +84,18 @@ public class Terminal extends JFrame {
 //				If EXE is typed
 				case "exe":
 //					HANDLE EXE CODE HERE
+					
 					break;
 					
 //				If RESET is typed	
 				case "reset":
+					
 //					HANDLE RESET CODE HERE
 					break;
 					
 //				If EXIT is typed	
 				case "exit":
-//					HANDLE EXIT CODE HERE
+					System.exit(0);
 					break;
 					
 				default:
@@ -117,7 +120,10 @@ public class Terminal extends JFrame {
 	}
 	
 	
-
+	public void clear()
+	{
+		
+	}
 	
 	
 	
