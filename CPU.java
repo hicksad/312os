@@ -10,6 +10,7 @@ public class CPU {
 	}
 	
 	public void incTime(){
+		
 		cpuTime++;
 	}
 	
