@@ -3,19 +3,25 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
+import javax.swing.JScrollBar;
 
 public class Terminal extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
-	private JTextPane textPane;
-
+	public String commandLineInput;
+	private  JTextArea textArea;
+	public String fileName;
+	JScrollPane scroll = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -24,6 +30,7 @@ public class Terminal extends JFrame {
 			public void run() {
 				try {
 					Terminal frame = new Terminal();
+
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -43,24 +50,83 @@ public class Terminal extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
-
+		
 		textField = new JTextField();
 		
 		
 		
 		textField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String commandLineInput = textField.getText();
-				textPane.setText(commandLineInput);
+				commandLineInput = textField.getText().toLowerCase();
+				textArea.append(commandLineInput + "\n");
+				textField.setText("");
+				System.out.println(commandLineInput);
+
+				
+				
+				switch(commandLineInput)
+				{
+//				If PROC is typed
+				case "proc":
+//					HANDLE PROC CODE HERE
+					break;
+					
+//				If MEM is typed
+				case "mem":
+//					HANDLE MEM CODE HERE
+					break;
+
+//				If LOAD is typed
+				case "load":
+//					HANDLE LOAD CODE HERE
+					break;
+					
+//				If EXE is typed
+				case "exe":
+//					HANDLE EXE CODE HERE
+					
+					break;
+					
+//				If RESET is typed	
+				case "reset":
+					
+//					HANDLE RESET CODE HERE
+					break;
+					
+//				If EXIT is typed	
+				case "exit":
+					System.exit(0);
+					break;
+					
+				default:
+					textArea.append("INVALID INPUT" + "\n");
+					break;
+				}
 				
 			}
 		});
 		contentPane.add(textField, BorderLayout.SOUTH);
 		textField.setColumns(10);
 		
-		textPane = new JTextPane();
-		textPane.setEditable(false);
-		contentPane.add(textPane, BorderLayout.CENTER);
+		textArea = new JTextArea();
+		textArea.setEditable(false);
+		contentPane.add(textArea, BorderLayout.CENTER);
+		
+		
+		
+		
+		
+		
 	}
-
+	
+	
+	public void clear()
+	{
+		
+	}
+	
+	
+	
+	
+	
 }
