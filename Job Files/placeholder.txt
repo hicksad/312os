@@ -1,0 +1,4 @@
+paint.exe 500
+word.exe 1000
+taskmanager.exe 10000
+EXE
