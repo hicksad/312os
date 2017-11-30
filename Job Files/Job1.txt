@@ -1,0 +1,4 @@
+Paint.exe 250
+Word.exe 400 
+Excel.exe 600
+EXE
