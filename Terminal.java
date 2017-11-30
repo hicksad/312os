@@ -7,6 +7,9 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
@@ -19,7 +22,10 @@ public class Terminal extends JFrame {
 	public String commandLineInput;
 	private  JTextArea textArea;
 	public String fileName;
-	JScrollPane scroll = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+	FileReaders fileReader = new FileReaders();
+	String file1[];
+	ArrayList<Process> programList = new ArrayList<Process>();
+	
 	
 	
 	/**
@@ -50,58 +56,90 @@ public class Terminal extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
-		
 		textField = new JTextField();
 		
 		
 		
 		textField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				commandLineInput = textField.getText().toLowerCase();
 				textArea.append(commandLineInput + "\n");
 				textField.setText("");
 				System.out.println(commandLineInput);
 
 				
-				
-				switch(commandLineInput)
+				if(commandLineInput.contains("proc"))
 				{
-//				If PROC is typed
-				case "proc":
-//					HANDLE PROC CODE HERE
-					break;
-					
-//				If MEM is typed
-				case "mem":
-//					HANDLE MEM CODE HERE
-					break;
-
-//				If LOAD is typed
-				case "load":
-//					HANDLE LOAD CODE HERE
-					break;
-					
-//				If EXE is typed
-				case "exe":
-//					HANDLE EXE CODE HERE
-					
-					break;
-					
-//				If RESET is typed	
-				case "reset":
-					
-//					HANDLE RESET CODE HERE
-					break;
-					
-//				If EXIT is typed	
-				case "exit":
-					System.exit(0);
-					break;
-					
-				default:
-					textArea.append("INVALID INPUT" + "\n");
-					break;
+					textArea.append("PROC was typed" + "\n");
 				}
+				else if(commandLineInput.contains("mem"))
+				{
+					textArea.append("MEM was typed" + "\n");
+				}
+				else if(commandLineInput.contains("load"))
+				{
+//					textArea.append("LOAD was typed" + "\n");
+					if(commandLineInput.contains(" "))
+					{
+//						textArea.append("Has a space" + "\n");
+						String procName;
+						int allocMem;
+						int spc = commandLineInput.indexOf(" ");
+						String command = commandLineInput.substring(0, spc);
+						textArea.append("Command is " + command + "\n");
+						String fileName = commandLineInput.substring(spc + 1, commandLineInput.length());
+						textArea.append("The file name is " + fileName + "\n");
+							try {
+								file1 = FileReaders.fileToArray(fileName);
+								
+								for(int i = 0; i < (file1.length - 1); i++)
+								{
+//									textArea.append(file1[i] + "\n");
+									String space[] = new String[2];
+									space = file1[i].split(" ");
+									procName = space[0];
+									allocMem = Integer.parseInt(space[1]);
+									textArea.append("The process name is " + procName + "\n");
+									textArea.append("The memory requirement is " + allocMem + "\n");
+									programList.add(new Process(procName, allocMem));
+									textArea.append(programList.toString() + "\n");
+//									programList.get(i).printProgram();
+								}
+							} catch (FileNotFoundException e1) {
+								textArea.append("File was not found" + "\n");
+//								e1.printStackTrace();
+							}
+							
+							
+//						textArea.append(Arrays.toString(file1));
+						
+					}
+					else
+					{
+						textArea.append("Nothing to load" + "\n");
+					}
+				}
+				else if(commandLineInput.contains("exe"))
+				{
+					textArea.append("EXE was typed" + "\n");
+				}
+				else if(commandLineInput.contains("reset"))
+				{
+					textArea.append("RESET was typed" + "\n");
+				}
+				else if(commandLineInput.contains("exit"))
+				{
+					System.exit(0);
+				}
+				else
+				{
+					textArea.append("INVALID INPUT" + "\n");
+				}
+				
+				
+				
+				
 				
 			}
 		});
