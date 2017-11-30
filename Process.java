@@ -13,6 +13,7 @@ public class Process implements Comparable {
 	public int arrivalTime;
 	public int startTime;
 	public int burstTime;
+	public int waitingTime;
 	public int priority;
 	public int ioTime;
 
@@ -27,19 +28,24 @@ public class Process implements Comparable {
 	 * Initializes a process with a new state with an arrival time and
 	 * memory+time requirements
 	 */
-	public Process(String name, int memReq, int timeReq, int arrivalTime) {
+	public Process(String name, int arrivalTime) {
 
 		this.name = name;
-		this.memReq = memReq;
-		this.timeReq = timeReq;
 		this.arrivalTime = arrivalTime;
 		setState(1);
+		setMemReq(0);
+		setTimeReq(0);
 		setTimeUsed(0);
 		setIoCount(0);
 		setIoTime(0);
 		setBurstTime(0);
 		setExecutedLines(0);
-		setNeedsNewLine(false);
+		setNeedsNewLine(true);
+	}
+	
+	public int generateMemReq(){
+		setMemReq(Integer.parseInt(getProgram(0)));
+		return getMemReq();
 	}
 
 	/**
@@ -49,6 +55,10 @@ public class Process implements Comparable {
 	public void processTick() {
 
 		switch (state) {
+		
+		case 2: //ready
+			
+			incWaitingTime();
 
 		case 3: // running
 			decBurstTime();
@@ -67,6 +77,7 @@ public class Process implements Comparable {
 			if(getIoTime()==0){
 				setNeedsNewLine(true);
 			}
+		//case 5????
 		}
 	}
 	
@@ -80,6 +91,11 @@ public class Process implements Comparable {
 			setNeedsNewLine(false);
 		}
 		
+		if(getExecutedLines()>getProgram().length){
+			setState(6);
+			return;
+		}
+		
 		String line = getProgram(getExecutedLines());
 		
 		if(line.contains(" ")){
@@ -87,22 +103,31 @@ public class Process implements Comparable {
 			command = line.substring(0,  space);
 			parameter = Integer.parseInt(line.substring(space+1,  line.length()+1));
 		}
+		else{
+			command = line;
+		}
 		
 		switch(command){
 		
 			case "CALCULATE" :
 				
+				setState(3);
+				setBurstTime(parameter);
+				
 			case "IO" :
 				
+				setState(4);
 				Random rand = new Random();
 				int randomNum = rand.nextInt(25) + 25;
 				 
 			case "YIELD" :
 				 
+				setState(2);
 				setNeedsNewLine(true);
 				
 			case "OUT" :
 				
+				//do a print
 				setNeedsNewLine(true);
 				
 			case "CRIT_ON" :
@@ -194,6 +219,18 @@ public class Process implements Comparable {
 	public void decBurstTime() {
 		burstTime--;
 	}
+	
+	public int getWaitingTime() {
+		return waitingTime;
+	}
+
+	public void setWaitingTime(int waitingTime) {
+		this.waitingTime = waitingTime;
+	}
+	
+	public void incWaitingTime(){
+		waitingTime++;
+	}
 
 	public int getPriority() {
 		return priority;
@@ -243,7 +280,7 @@ public class Process implements Comparable {
 
 		timeReq = 0;
 
-		for (int i = 0; i < program.length; i++) {
+		for (int i = 1; i < program.length; i++) {
 			if (program[i].matches(".*\\d+.*")) {
 				String temp = program[i];
 				timeReq += Integer.parseInt(temp.replaceAll("[\\D]", ""));
