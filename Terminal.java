@@ -146,8 +146,6 @@ public class Terminal extends JFrame {
 //								e1.printStackTrace();
 							}
 
-							
-							
 						
 					}
 					else
@@ -173,22 +171,14 @@ public class Terminal extends JFrame {
 				}
 				
 				
-				
-				
-				
+					
 			}
 		});
 		contentPane.add(textField, BorderLayout.SOUTH);
 		textField.setColumns(10);
-		
 		textArea = new JTextArea();
 		textArea.setEditable(false);
 		contentPane.add(textArea, BorderLayout.CENTER);
-		
-		
-		
-		
-		
 		
 	}
 	
