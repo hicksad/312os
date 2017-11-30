@@ -1,15 +1,16 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
@@ -68,26 +69,27 @@ public class Terminal extends JFrame {
 				textField.setText("");
 				System.out.println(commandLineInput);
 
-				
-				if(commandLineInput.contains("proc"))
+
+				if(commandLineInput.contains("proc"))            //				IF PROC IS ENTERED
 				{
 					textArea.append("PROC was typed" + "\n");
 				}
-				else if(commandLineInput.contains("mem"))
+				else if(commandLineInput.contains("mem"))        //				IF MEM IS ENTERED
 				{
 					textArea.append("MEM was typed" + "\n");
 				}
-				else if(commandLineInput.contains("load"))
+				else if(commandLineInput.contains("load"))       //				IF LOAD IS ENTERED
 				{
 //					textArea.append("LOAD was typed" + "\n");
 					if(commandLineInput.contains(" "))
 					{
 //						textArea.append("Has a space" + "\n");
+						
 						String procName;
 						int allocMem;
 						int spc = commandLineInput.indexOf(" ");
 						String command = commandLineInput.substring(0, spc);
-						textArea.append("Command is " + command + "\n");
+						textArea.append("Command is " + command.toUpperCase() + "\n");
 						String fileName = commandLineInput.substring(spc + 1, commandLineInput.length());
 						textArea.append("The file name is " + fileName + "\n");
 							try {
@@ -95,7 +97,6 @@ public class Terminal extends JFrame {
 								
 								for(int i = 0; i < (file1.length - 1); i++)
 								{
-//									textArea.append(file1[i] + "\n");
 									String space[] = new String[2];
 									space = file1[i].split(" ");
 									procName = space[0];
@@ -103,16 +104,50 @@ public class Terminal extends JFrame {
 									textArea.append("The process name is " + procName + "\n");
 									textArea.append("The memory requirement is " + allocMem + "\n");
 									programList.add(new Process(procName, allocMem));
-									textArea.append(programList.toString() + "\n");
-//									programList.get(i).printProgram();
+//									textArea.append(programList.toString() + "\n");
+
+									
+									
+//									System.out.println(procName);
+									
+									try{
+								        // check and read command line argument for file name
+								          
+//								    System.out.println("The file name is " + fileName);
+								    
+								    // verify file and create file Scanner
+									System.out.println(procName);
+//								    Scanner fileReader = openFile(procName);
+//									 programArray = FileReaders.fileToArray(procName);
+//									 programArray = FileReaders.fileToArray(programList.get(i).getName());
+									 programList.get(i).setProgram(FileReaders.fileToArray(programList.get(i).getName()));               
+									 programList.get(i).printProgram();
+									 
+									 
+									 
+//									 LOOP TO PRINT PROCESS	 
+//									 for(int j = 0; j < programArray.length; j++)
+//									 {
+//										 System.out.println(programArray[j]);
+//									 }
+									 
+									 
+//									 System.out.println(programArray.length);
+
+								 	}
+									
+									
+								 	catch(FileNotFoundException noFile){
+									 	System.out.println("There was an error opening or reading from the file.");
+								 	}
 								}
 							} catch (FileNotFoundException e1) {
 								textArea.append("File was not found" + "\n");
 //								e1.printStackTrace();
 							}
+
 							
 							
-//						textArea.append(Arrays.toString(file1));
 						
 					}
 					else
@@ -120,15 +155,15 @@ public class Terminal extends JFrame {
 						textArea.append("Nothing to load" + "\n");
 					}
 				}
-				else if(commandLineInput.contains("exe"))
+				else if(commandLineInput.contains("exe"))         //				IF EXE IS ENTERED
 				{
 					textArea.append("EXE was typed" + "\n");
 				}
-				else if(commandLineInput.contains("reset"))
+				else if(commandLineInput.contains("reset"))       //				IF RESET IS ENTERED
 				{
 					textArea.append("RESET was typed" + "\n");
 				}
-				else if(commandLineInput.contains("exit"))
+				else if(commandLineInput.contains("exit"))        //				IF EXIT IS ENTERED
 				{
 					System.exit(0);
 				}
@@ -157,6 +192,8 @@ public class Terminal extends JFrame {
 		
 	}
 	
+	
+
 	
 	public void clear()
 	{
