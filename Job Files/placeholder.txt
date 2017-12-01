@@ -1,4 +1,4 @@
-paint.exe 500
-word.exe 1000
-taskmanager.exe 10000
+paint.txt 500
+word.txt 1000
+taskmanager.txt 10000
 EXE
