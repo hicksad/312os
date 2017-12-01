@@ -1,4 +1,4 @@
-Paint.exe 250
-Word.exe 400 
-Excel.exe 600
+Paint.txt 250
+Word.txt 400 
+Excel.txt 600
 EXE
