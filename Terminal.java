@@ -8,7 +8,6 @@ import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -20,7 +19,7 @@ import javax.swing.JScrollBar;
 public class Terminal extends JFrame {
 
 	private JPanel contentPane;
-	public static JTextField textField;
+	private JTextField textField;
 	public String commandLineInput;
 	private  JTextArea textArea;
 	public String fileName;
@@ -40,8 +39,6 @@ public class Terminal extends JFrame {
 					Terminal frame = new Terminal();
 
 					frame.setVisible(true);
-					textField.requestFocus();
-					frame.setTitle("Terminal");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -53,16 +50,16 @@ public class Terminal extends JFrame {
 	 * Create the frame.
 	 */
 	public Terminal() {
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(400, 150, 714, 400);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
 		textField = new JTextField();
-
+		
+		
 		
 		textField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -162,12 +159,7 @@ public class Terminal extends JFrame {
 				}
 				else if(commandLineInput.contains("reset"))       //				IF RESET IS ENTERED
 				{
-//					textArea.append("RESET was typed" + "\n");
-					textArea.setText("");
-					for(int clear = 0; clear < 100; clear++)
-					{
-						System.out.println("\n");
-					}
+					textArea.append("RESET was typed" + "\n");
 				}
 				else if(commandLineInput.contains("exit"))        //				IF EXIT IS ENTERED
 				{
@@ -182,13 +174,11 @@ public class Terminal extends JFrame {
 					
 			}
 		});
-		
 		contentPane.add(textField, BorderLayout.SOUTH);
 		textField.setColumns(10);
 		textArea = new JTextArea();
 		textArea.setEditable(false);
 		contentPane.add(textArea, BorderLayout.CENTER);
-		
 		
 	}
 	

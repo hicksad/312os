@@ -12,16 +12,18 @@ public class Process implements Comparable {
 
 	public int arrivalTime;
 	public int startTime;
-	public int burstTime;
+	public int burstTime;  //TIME REMAINING
+	public int ioTime;		//TIME REMAINING
 	public int waitingTime;
 	public int priority;
-	public int ioTime;
 
 	public int state; // 1-6 - NEW, READY, RUN, WAIT, CSWAIT, EXIT
+	public int stateDesired;
 
 	public int memReq;
 	public int timeReq;
 	public int timeUsed;
+	public int timeRem;
 	public int ioCount;
 
 	/**
@@ -40,12 +42,31 @@ public class Process implements Comparable {
 		setIoTime(0);
 		setBurstTime(0);
 		setExecutedLines(0);
-		setNeedsNewLine(true);
+		setNeedsNewLine(false);
 	}
 	
-	public int generateMemReq(){
-		setMemReq(Integer.parseInt(getProgram(0)));
-		return getMemReq();
+	public void waitTick(){
+		decIoTime();
+		
+		incIoCount();
+		
+		if(getIoTime()==0){
+			setNeedsNewLine(true);
+		}
+	}
+	
+	public void runTick(){
+		decBurstTime();
+		
+		incTimeUsed();
+		
+		if(getBurstTime()==0){
+			setNeedsNewLine(true);
+		}
+	}
+	
+	public void readyTick(){
+		incWaitingTime();
 	}
 
 	/**
@@ -59,17 +80,22 @@ public class Process implements Comparable {
 		case 2: //ready
 			
 			incWaitingTime();
+			break;
 
 		case 3: // running
+			
 			decBurstTime();
 			
 			incTimeUsed();
 			
 			if(getBurstTime()==0){
 				setNeedsNewLine(true);
+
 			}
+			break;
 
 		case 4: // waiting for I/O
+			
 			decIoTime();
 			
 			incIoCount();
@@ -77,22 +103,30 @@ public class Process implements Comparable {
 			if(getIoTime()==0){
 				setNeedsNewLine(true);
 			}
+			break;
 		//case 5????
 		}
 	}
 	
-	public void doNextLine(){
+	/**
+	 * If the line is completed, move to the next one and change state appropriately
+	 */
+	public void goToNextLine(){
 		
 		String command = "";
-		int parameter = 0;
+		int argument = 0;
 		
 		if(isNeedsNewLine() == true){
 			incExecutedLines();
 			setNeedsNewLine(false);
 		}
 		
-		if(getExecutedLines()>getProgram().length){
-			setState(6);
+		if(getExecutedLines()>=getProgram().length){
+			setStateDesired(6);
+			return;
+		}
+		
+		if(isNeedsNewLine() == false && (getBurstTime()>0 || getIoTime()>0) && (getState() == 3 || getState()==4)){
 			return;
 		}
 		
@@ -101,43 +135,73 @@ public class Process implements Comparable {
 		if(line.contains(" ")){
 			int space = line.indexOf(" ");
 			command = line.substring(0,  space);
-			parameter = Integer.parseInt(line.substring(space+1,  line.length()+1));
+			argument = Integer.parseInt(line.substring(space+1,  line.length()));
 		}
 		else{
 			command = line;
 		}
-		
 		switch(command){
 		
-			case "CALCULATE" :
+			case "CALCULATE":
 				
-				setState(3);
-				setBurstTime(parameter);
+				if(argument == 0){
+					setNeedsNewLine(true);
+					goToNextLine();
+				}
+				if(argument != 0){
+					setStateDesired(3);
+					setBurstTime(argument);
+				}
+				break;
 				
-			case "IO" :
+			case "IO":
 				
-				setState(4);
+				setStateDesired(4);
 				Random rand = new Random();
-				int randomNum = rand.nextInt(25) + 25;
+				int randomNum = rand.nextInt(10) + 10;
+				setIoTime(randomNum);
+				break;
 				 
-			case "YIELD" :
+			case "YIELD":
 				 
-				setState(2);
+				setStateDesired(2);
 				setNeedsNewLine(true);
+				goToNextLine();
+				break;
 				
-			case "OUT" :
+			case "OUT":
 				
-				//do a print
+				//print function
+				System.out.println("OUT WORKS MAN IT WORKSSSS");
 				setNeedsNewLine(true);
+				goToNextLine();
+				break;
 				
-			case "CRIT_ON" :
-				
-				setNeedsNewLine(true);
-				
-			case "CRIT_OFF" :
+			case "CRIT_ON":
 				
 				setNeedsNewLine(true);
+				goToNextLine();
+				break;
+				
+			case "CRIT_OFF":
+				
+				setNeedsNewLine(true);
+				goToNextLine();
+				break;
 		}
+	}
+	
+	public void retrieveData(){
+		if(getProgram()!=null){
+			generateMemReq();
+			generateTimeReq();
+		}
+	}
+	
+	public int generateMemReq(){
+		setMemReq(Integer.parseInt(getProgram(0)));
+		incExecutedLines();
+		return getMemReq();
 	}
 
 	public String getName() {
@@ -259,6 +323,14 @@ public class Process implements Comparable {
 	public void setState(int state) {
 		this.state = state;
 	}
+	
+	public int getStateDesired() {
+		return stateDesired;
+	}
+
+	public void setStateDesired(int stateDesired) {
+		this.stateDesired = stateDesired;
+	}
 
 	public int getMemReq() {
 		return memReq;
@@ -319,15 +391,21 @@ public class Process implements Comparable {
 
 	@Override
 	public String toString() {
-		return "PROCESS DATA: [name=" + name + ", id=" + id + ", arrivalTime=" + arrivalTime + ", startTime="
-				+ startTime + ", burstTime=" + burstTime + ", priority=" + priority + ", state=" + state + ", memReq="
-				+ memReq + ", timeReq=" + timeReq + ", timeUsed=" + timeUsed + ", ioCount=" + ioCount + "]";
+		return "[name=" + name + ", id=" + id + ", arrivalTime=" + arrivalTime + ", startTime="
+				+ startTime + ", burstTime=" + burstTime + ", priority=" + priority + ", state=" + state + ", stateDesired=" + stateDesired + ", memReq="
+				+ memReq + ", timeReq=" + timeReq + ", timeRemaining=" + getTimeRemaining() + ", ioCount=" + ioCount + ", ioTime=" + ioTime + ", needsNewLine=" + isNeedsNewLine() + "]";
 	}
 
-	public String getPCB() {
-		return "PROCESS DATA: [name=" + name + ", id=" + id + ", arrivalTime=" + arrivalTime + ", startTime="
-				+ startTime + ", burstTime=" + burstTime + ", priority=" + priority + ", state=" + state + ", memReq="
-				+ memReq + ", timeReq=" + timeReq + ", timeUsed=" + timeUsed + ", ioCount=" + ioCount + "]";
+	public void printProgram() {
+		for(int i = 0; i < program.length; i++){
+			System.out.println(program[i]);
+		}
+	}
+	
+	public void outCommand() {
+		System.out.println("NAME=" + name + "     ARRIVAL=" + arrivalTime + "     MEM.REQ=" + memReq);
+		System.out.println("TIME.LEFT=" + (timeReq-timeUsed) + "/" + timeReq + "     TIME.WAIT=" + waitingTime + "     TIME.TOTAL=" + (timeUsed + waitingTime + ioCount));
+		System.out.println("STATE=" + state + "     IO.DONE=" + ioCount);
 	}
 
 	@Override

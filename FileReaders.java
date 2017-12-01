@@ -33,11 +33,12 @@ public class FileReaders {
 	 * @param FILE NAME
 	 * @return an array of the lines of the file
 	 */
-	public static String[] fileToArray(String file) throws FileNotFoundException {
+	
+	public static String[] fileToArray(String fileName) throws FileNotFoundException {
 
 		ArrayList<String> commands = new ArrayList<String>();
 
-		Scanner sc = new Scanner(new BufferedReader(new FileReader(file))); //file to be read in
+		Scanner sc = new Scanner(new BufferedReader(new FileReader(fileName))); //file to be read in
 
 		while (sc.hasNextLine()) {
 			commands.add(sc.nextLine());
