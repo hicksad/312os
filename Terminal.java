@@ -63,7 +63,7 @@ public class Terminal extends JFrame {
 		contentPane.add(textField, BorderLayout.SOUTH);
 		textField.setColumns(10);
 		textArea = new JTextArea();
-		scroll = new JScrollPane(textArea,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scroll = new JScrollPane(textArea,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		textArea.setEditable(false);
 		contentPane.add(scroll, BorderLayout.CENTER);
 
