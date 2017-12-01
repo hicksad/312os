@@ -12,8 +12,10 @@ public class Scheduler {
 	public ArrayList<Process> Wait = new ArrayList<Process>();
 	public ArrayList<Process> WaitCS = new ArrayList<Process>();
 	public ArrayList<Process> Done = new ArrayList<Process>();
-
+	
 	public void tick() {
+		
+		arriveToNew();
 
 		for (Process process : Wait) {
 			process.goToNextLine();
@@ -180,7 +182,17 @@ public class Scheduler {
 
 	public void allToNew() {
 		for (Process all : AllProcesses) {
+			all.retrieveData();
 			New.add(all);
+		}
+	}
+	
+	public void arriveToNew() {
+		for (Process all : AllProcesses) {
+			if(all.getArrivalTime()==getCpu().getcpuTime()){
+				all.retrieveData();
+				New.add(all);
+			}
 		}
 	}
 
@@ -190,7 +202,7 @@ public class Scheduler {
 	public void newToReady() {
 
 		for (int i = 0; i < New.size(); i++) {
-			if (New.get(i).getMemReq() + cpu.getMemory() <= 4096) {
+			if (New.get(i).getMemReq() + cpu.getMem() <= 4096) {
 				Ready.add(New.get(i));
 				Ready.get(Ready.size() - 1).setState(2);
 				New.remove(i);
