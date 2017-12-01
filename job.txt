@@ -1,4 +1,4 @@
 program.txt 100
 programm.txt 1000
-programmmm.txt 1500
+programmm.txt 1500
 EXE
