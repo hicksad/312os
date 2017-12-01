@@ -1,6 +1,7 @@
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -13,8 +14,6 @@ import java.util.*;
 public class GUI {
 
 	private JFrame frame;
-	private JTextField textField = new JTextField(20);
-
 	/**
 	 * Launch the application.
 	 */
@@ -43,7 +42,7 @@ public class GUI {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(400, 200, 850, 650);
+		frame.setBounds(1000, 200, 850, 650);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setTitle("Operating System Simulator");
@@ -65,19 +64,28 @@ public class GUI {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.setVisible(true);
 				Terminal terminal = new Terminal();
+				terminal.setTitle("Terminal");
 				terminal.setVisible(true);
 				Terminal.textField.requestFocus();
 			}
 		});
 		btnTerminal.setBounds(25, 56, 148, 168);
 		frame.getContentPane().add(btnTerminal);
+		
+		JButton btnGraph = new JButton("Graph");
+		btnGraph.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(true);
+				PagingGraph graph = new PagingGraph();
+				graph.setTitle("Graph");
+				graph.setVisible(true);
+			}
+		});
+		btnGraph.setBounds(484, 122, 199, 113);
+		frame.getContentPane().add(btnGraph);
 //		frmTerminal.getContentPane().add(textField);
 		
 		
 		
-		
-		JButton btnScheduling = new JButton("Scheduling");
-		btnScheduling.setBounds(25, 273, 148, 168);
-		frame.getContentPane().add(btnScheduling);
 	}
 }

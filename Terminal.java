@@ -27,7 +27,7 @@ public class Terminal extends JFrame {
 	FileReaders fileReader = new FileReaders();
 	String file1[];
 	ArrayList<Process> programList = new ArrayList<Process>();
-	
+	JScrollPane scroll;
 	
 	
 	/**
@@ -38,10 +38,9 @@ public class Terminal extends JFrame {
 			public void run() {
 				try {
 					Terminal frame = new Terminal();
-
+					frame.setTitle("Terminal");
 					frame.setVisible(true);
 					textField.requestFocus();
-					frame.setTitle("Terminal");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -60,8 +59,13 @@ public class Terminal extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		
 		textField = new JTextField();
+		contentPane.add(textField, BorderLayout.SOUTH);
+		textField.setColumns(10);
+		textArea = new JTextArea();
+		scroll = new JScrollPane(textArea,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		textArea.setEditable(false);
+		contentPane.add(scroll, BorderLayout.CENTER);
 
 		
 		textField.addActionListener(new ActionListener() {
@@ -102,7 +106,7 @@ public class Terminal extends JFrame {
 								{
 									String space[] = new String[2];
 									space = file1[i].split(" ");
-									procName = space[0];
+									procName = space[0].toLowerCase().trim();
 									allocMem = Integer.parseInt(space[1]);
 									textArea.append("The process name is " + procName + "\n");
 									textArea.append("The memory requirement is " + allocMem + "\n");
@@ -116,39 +120,26 @@ public class Terminal extends JFrame {
 									try{
 								        // check and read command line argument for file name
 								          
-//								    System.out.println("The file name is " + fileName);
+								    System.out.println("The job file name is " + fileName);
 								    
-								    // verify file and create file Scanner
-									System.out.println(procName);
-//								    Scanner fileReader = openFile(procName);
-//									 programArray = FileReaders.fileToArray(procName);
-//									 programArray = FileReaders.fileToArray(programList.get(i).getName());
-									 programList.get(i).setProgram(FileReaders.fileToArray(programList.get(i).getName()));               
-									 programList.get(i).printProgram();
+									System.out.println("The program name is " + procName);
+									programList.get(i).setProgram(FileReaders.fileToArray(programList.get(i).getName()));               
+									programList.get(i).printProgram();
 									 
 									 
 									 
-//									 LOOP TO PRINT PROCESS	 
-//									 for(int j = 0; j < programArray.length; j++)
-//									 {
-//										 System.out.println(programArray[j]);
-//									 }
-									 
-									 
-//									 System.out.println(programArray.length);
+
 
 								 	}
-									
-									
 								 	catch(FileNotFoundException noFile){
 									 	System.out.println("There was an error opening or reading from the file.");
 								 	}
+//									programList.get(i).printProgram();
 								}
 							} catch (FileNotFoundException e1) {
 								textArea.append("File was not found" + "\n");
 //								e1.printStackTrace();
 							}
-
 						
 					}
 					else
@@ -183,11 +174,6 @@ public class Terminal extends JFrame {
 			}
 		});
 		
-		contentPane.add(textField, BorderLayout.SOUTH);
-		textField.setColumns(10);
-		textArea = new JTextArea();
-		textArea.setEditable(false);
-		contentPane.add(textArea, BorderLayout.CENTER);
 		
 		
 	}
