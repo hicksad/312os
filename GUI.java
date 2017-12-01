@@ -43,11 +43,11 @@ public class GUI {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 678, 621);
+		frame.setBounds(400, 200, 850, 650);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setTitle("Operating System Simulator");
-		
+
 		
 		
 		
@@ -63,12 +63,13 @@ public class GUI {
 		JButton btnTerminal = new JButton("Terminal");
 		btnTerminal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				frame.setVisible(false);
+				frame.setVisible(true);
 				Terminal terminal = new Terminal();
 				terminal.setVisible(true);
+				Terminal.textField.requestFocus();
 			}
 		});
-		btnTerminal.setBounds(25, 84, 148, 158);
+		btnTerminal.setBounds(25, 56, 148, 168);
 		frame.getContentPane().add(btnTerminal);
 //		frmTerminal.getContentPane().add(textField);
 		
