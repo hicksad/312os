@@ -28,10 +28,11 @@ public class Terminal extends JFrame {
 	String file1[];
 	public ArrayList<Process> programList = new ArrayList<Process>();
 	JScrollPane scroll;
-
 	
 	
 	Scheduler sch = new Scheduler();
+	
+	
 	
 	
 	/**
@@ -45,6 +46,7 @@ public class Terminal extends JFrame {
 					frame.setTitle("Terminal");
 					frame.setVisible(true);
 					textField.requestFocus();
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -56,7 +58,7 @@ public class Terminal extends JFrame {
 	 * Create the frame.
 	 */
 	public Terminal() {
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(400, 150, 714, 400);
 		contentPane = new JPanel();
@@ -70,6 +72,8 @@ public class Terminal extends JFrame {
 		scroll = new JScrollPane(textArea,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		textArea.setEditable(false);
 		contentPane.add(scroll, BorderLayout.CENTER);
+		
+		
 		
 		
 		textField.addActionListener(new ActionListener() {
@@ -137,7 +141,6 @@ public class Terminal extends JFrame {
 									
 								}
 								
-								
 							} catch (FileNotFoundException e1) {
 								textArea.append("File was not found" + "\n");
 //								e1.printStackTrace();
@@ -156,16 +159,11 @@ public class Terminal extends JFrame {
 				}
 				else if(commandLineInput.contains("reset"))       //				IF RESET IS ENTERED
 				{
-//					textArea.append("RESET was typed" + "\n");
-					textArea.setText("");
-					for(int clear = 0; clear < 100; clear++)
-					{
-						System.out.println("\n");
-					}
+					reset();
 				}
 				else if(commandLineInput.contains("exit"))        //				IF EXIT IS ENTERED
 				{
-					System.exit(0);
+					exit();
 				}
 				else
 				{
@@ -178,15 +176,24 @@ public class Terminal extends JFrame {
 		});
 		
 		
+	}
+	
+	public void reset()
+	{
+//		textArea.append("RESET was typed" + "\n");
+		
+		textArea.setText("");
+		for(int clear = 0; clear < 100; clear++)
+		{
+			System.out.println("\n");
+		}
 		
 	}
 	
-
-
 	
-	public void clear()
+	public void exit()
 	{
-		
+		System.exit(0);
 	}
 	
 	

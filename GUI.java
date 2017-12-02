@@ -42,21 +42,14 @@ public class GUI {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(1000, 200, 850, 650);
+		frame.setBounds(300, 200, 850, 650);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setTitle("Operating System Simulator");
 
 		
 		
-		
-		
-		
-//		frmTerminal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		frmTerminal.getContentPane().setLayout(null);
-//		frmTerminal.setTitle("Terminal");
-//		frmTerminal.setBounds(100, 100, 678, 621);
-		
+
 		
 		
 		JButton btnTerminal = new JButton("Terminal");
@@ -67,6 +60,7 @@ public class GUI {
 				terminal.setTitle("Terminal");
 				terminal.setVisible(true);
 				Terminal.textField.requestFocus();
+
 			}
 		});
 		btnTerminal.setBounds(25, 56, 148, 168);
@@ -83,7 +77,18 @@ public class GUI {
 		});
 		btnGraph.setBounds(484, 122, 199, 113);
 		frame.getContentPane().add(btnGraph);
-//		frmTerminal.getContentPane().add(textField);
+		
+		JButton btnTable = new JButton("Table");
+		btnTable.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(true);
+				Table table = new Table();
+				table.setTitle("Table");
+				table.setVisible(true);
+			}
+		});
+		btnTable.setBounds(48, 347, 137, 135);
+		frame.getContentPane().add(btnTable);
 		
 		
 		
