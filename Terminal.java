@@ -26,8 +26,12 @@ public class Terminal extends JFrame {
 	public String fileName;
 	FileReaders fileReader = new FileReaders();
 	String file1[];
-	ArrayList<Process> programList = new ArrayList<Process>();
+	public ArrayList<Process> programList = new ArrayList<Process>();
 	JScrollPane scroll;
+
+	
+	
+	Scheduler sch = new Scheduler();
 	
 	
 	/**
@@ -66,16 +70,15 @@ public class Terminal extends JFrame {
 		scroll = new JScrollPane(textArea,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		textArea.setEditable(false);
 		contentPane.add(scroll, BorderLayout.CENTER);
-
+		
 		
 		textField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				commandLineInput = textField.getText().toLowerCase();
-				textArea.append(commandLineInput + "\n");
+//				textArea.append(commandLineInput + "\n");
 				textField.setText("");
 				System.out.println(commandLineInput);
-
 
 				if(commandLineInput.contains("proc"))            //				IF PROC IS ENTERED
 				{
@@ -87,18 +90,16 @@ public class Terminal extends JFrame {
 				}
 				else if(commandLineInput.contains("load"))       //				IF LOAD IS ENTERED
 				{
-//					textArea.append("LOAD was typed" + "\n");
 					if(commandLineInput.contains(" "))
 					{
-//						textArea.append("Has a space" + "\n");
 						
 						String procName;
-						int allocMem;
+						int arrivalTime;
 						int spc = commandLineInput.indexOf(" ");
-						String command = commandLineInput.substring(0, spc);
-						textArea.append("Command is " + command.toUpperCase() + "\n");
+						String command = commandLineInput.substring(0, spc).toUpperCase();
+//						textArea.append("Command is " + command.toUpperCase() + "\n");
 						String fileName = commandLineInput.substring(spc + 1, commandLineInput.length());
-						textArea.append("The file name is " + fileName + "\n");
+						textArea.append("LOAD " + fileName + "\n");
 							try {
 								file1 = FileReaders.fileToArray(fileName);
 								
@@ -107,10 +108,9 @@ public class Terminal extends JFrame {
 									String space[] = new String[2];
 									space = file1[i].split(" ");
 									procName = space[0].toLowerCase().trim();
-									allocMem = Integer.parseInt(space[1]);
-									textArea.append("The process name is " + procName + "\n");
-									textArea.append("The memory requirement is " + allocMem + "\n");
-									programList.add(new Process(procName, allocMem));
+									arrivalTime = Integer.parseInt(space[1]);
+									textArea.append("LOAD " + procName + " " + arrivalTime + "\n");
+									programList.add(new Process(procName, arrivalTime));
 //									textArea.append(programList.toString() + "\n");
 
 									
@@ -126,30 +126,33 @@ public class Terminal extends JFrame {
 									programList.get(i).setProgram(FileReaders.fileToArray(programList.get(i).getName()));               
 									programList.get(i).printProgram();
 									 
-									 
-									 
-
+									sch.addProcess(programList.get(i));
+									
+									
 
 								 	}
 								 	catch(FileNotFoundException noFile){
 									 	System.out.println("There was an error opening or reading from the file.");
 								 	}
-//									programList.get(i).printProgram();
+									
 								}
+								
+								
 							} catch (FileNotFoundException e1) {
 								textArea.append("File was not found" + "\n");
 //								e1.printStackTrace();
 							}
-						
 					}
 					else
 					{
 						textArea.append("Nothing to load" + "\n");
 					}
+
 				}
 				else if(commandLineInput.contains("exe"))         //				IF EXE IS ENTERED
 				{
-					textArea.append("EXE was typed" + "\n");
+					textArea.append("EXE");
+					sch.FCFS();
 				}
 				else if(commandLineInput.contains("reset"))       //				IF RESET IS ENTERED
 				{
@@ -178,7 +181,7 @@ public class Terminal extends JFrame {
 		
 	}
 	
-	
+
 
 	
 	public void clear()
